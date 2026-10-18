@@ -1,0 +1,6 @@
+cobra-tools/
+buildenv/
+installer/build/
+installer/dist/
+__pycache__/
+*.pyc

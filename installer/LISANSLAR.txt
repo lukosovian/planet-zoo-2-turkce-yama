@@ -1,0 +1,21 @@
+Planet Zoo 2 Türkçe Yama — lisans ve telif bilgileri
+=====================================================
+
+Bu program resmî değildir; Frontier Developments ile bağlantılı değildir ve onlar tarafından
+onaylanmamıştır. Planet Zoo, Frontier Developments plc'nin ticari markasıdır.
+
+Bu programın içinde oyuna ait hiçbir dosya ya da İngilizce metin yoktur. Yama, oyuncunun kendi
+bilgisayarındaki oyun dosyasından üretilir. Oyunun sıkıştırma kütüphanesi (Oodle) de programa
+dahil değildir; oyunun kendi klasöründeki kopyası kullanılır.
+
+Türkçe çeviri: lukosovian — https://github.com/lukosovian
+Ücretsizdir, satılamaz.
+
+Üçüncü taraf yazılımlar
+-----------------------
+cobra-tools — https://github.com/OpenNaja/cobra-tools
+  GNU General Public License v3.0 ile lisanslanmıştır. Bu programda Loc.ovl dosyalarını okumak ve
+  yazmak için cobra-tools'un ilgili modülleri değiştirilmeden kullanılmıştır. Lisans metni programın
+  içinde cobra-tools/LICENSE dosyasındadır; kaynak kodu yukarıdaki adresten edinilebilir.
+
+Python, NumPy, Pillow, imageio, bitarray, PyInstaller — kendi açık kaynak lisanslarıyla.
