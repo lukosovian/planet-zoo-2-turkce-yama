@@ -8,8 +8,20 @@ Planet Zoo 2 için gönüllü olarak hazırlanmış, **resmî olmayan** Türkçe
 **[⬇ PZ2TurkceYama.exe dosyasını indir](../../releases/latest)** — tek tıkla kurulur, Python ya da başka bir program gerekmez.
 
 <p align="center">
-  <img src="docs/ana-menu.jpg" alt="Planet Zoo 2 ana menüsü Türkçe" width="480">
-  <img src="docs/kurulum.png" alt="Planet Zoo 2 Türkçe Yama kurulum programı" width="420">
+  <img src="docs/ana-menu.jpg" alt="Planet Zoo 2 ana menüsü Türkçe" width="860">
+</p>
+
+## Ekran görüntüleri
+
+| Zoopedia | Ziyaretçi düşünceleri |
+|---|---|
+| ![Zoopedia Türkçe](docs/zoopedia.jpg) | ![Ziyaretçi düşünceleri Türkçe](docs/dusunceler.jpg) |
+| **Hayvanat bahçesi genel bakış** | **Habitat bariyerleri** |
+| ![Genel bakış ekranı Türkçe](docs/genel-bakis.jpg) | ![Habitat bariyeri aracı Türkçe](docs/bariyer.jpg) |
+
+<p align="center">
+  <img src="docs/kurulum.png" alt="Planet Zoo 2 Türkçe Yama kurulum programı" width="460"><br>
+  <em>Kurulum programı</em>
 </p>
 
 ## Neler çevrildi?
