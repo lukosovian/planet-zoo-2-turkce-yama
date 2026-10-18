@@ -5,6 +5,13 @@ Planet Zoo 2 için gönüllü olarak hazırlanmış, **resmî olmayan** Türkçe
 > Bu proje Frontier Developments ile bağlantılı değildir ve onlar tarafından onaylanmamıştır.
 > Planet Zoo, Frontier Developments plc'nin ticari markasıdır.
 
+**[⬇ PZ2TurkceYama.exe dosyasını indir](../../releases/latest)** — tek tıkla kurulur, Python ya da başka bir program gerekmez.
+
+<p align="center">
+  <img src="docs/ana-menu.jpg" alt="Planet Zoo 2 ana menüsü Türkçe" width="480">
+  <img src="docs/kurulum.png" alt="Planet Zoo 2 Türkçe Yama kurulum programı" width="420">
+</p>
+
 ## Neler çevrildi?
 
 Oyundaki çevrilmesi gereken metinlerin tamamı (31.254 metin) Türkçeye çevrildi:
