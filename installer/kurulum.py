@@ -67,6 +67,12 @@ def fingerprint(text: str) -> str:
     return hashlib.sha1(text.encode("utf-8")).hexdigest()[:12]
 
 
+def already_patched(strings: dict[str, str], entries: dict) -> bool:
+    """Dosyadaki metinlerin çoğu zaten Türkçe mi (ör. geliştirici aracıyla ya da başka bir sürümle yamalanmış)?"""
+    hits = sum(1 for sid, (_, tr) in entries.items() if strings.get(sid) == tr)
+    return hits > len(entries) // 2
+
+
 # --------------------------------------------------------------------------- oyun klasörünü bulma
 
 def is_game_dir(p: Path) -> bool:
@@ -146,19 +152,34 @@ def install(game: Path, log) -> None:
         backup = BACKUP_DIR / rel
         entry = state.get(rel, {})
         cur = sha256(game_file)
+        log(f"{rel}: okunuyor...")
         if cur == entry.get("patched_sha") and backup.exists():
             original = backup
+            strings = fastloc.read_strings(original)
         else:
-            # Oyunun kendi dosyası (ilk kurulum ya da oyun güncellemesi): yedekle
-            backup.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(game_file, backup)
-            if entry.get("orig_sha") and entry["orig_sha"] != cur:
-                log(f"{rel}: oyun güncellenmiş, yeni dosya yedeklendi.")
-            entry = {"orig_sha": cur}
-            original = backup
-        log(f"{rel}: okunuyor...")
-        strings = fastloc.read_strings(original)
-        texts, stale = {}, 0
+            strings = fastloc.read_strings(game_file)
+            if already_patched(strings, entries):
+                # Dosya zaten Türkçe: orijinal değildir, yedeğin üzerine yazılmaz. Mevcut yedek yalnızca
+                # aynı oyun sürümüne aitse (metin kimlikleri aynıysa) ve kendisi yamalı değilse tutulur.
+                keep = False
+                if backup.exists():
+                    old = fastloc.read_strings(backup)
+                    keep = old.keys() == strings.keys() and not already_patched(old, entries)
+                if not keep:
+                    backup.unlink(missing_ok=True)
+                    entry = {}
+                    log(f"{rel}: dosya zaten Türkçe yamalı ama orijinal yedeği yok. Yamayı kaldırmak için "
+                        "Epic Games / Steam'de oyun dosyalarını doğrulaman gerekir.")
+                original = game_file
+            else:
+                # Oyunun kendi dosyası (ilk kurulum ya da oyun güncellemesi): yedekle
+                backup.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(game_file, backup)
+                if entry.get("orig_sha") and entry["orig_sha"] != cur:
+                    log(f"{rel}: oyun güncellenmiş, yeni dosya yedeklendi.")
+                entry = {"orig_sha": cur}
+                original = backup
+        texts, stale, present = {}, 0, 0
         if pack in verified:
             # İngiliz İngilizcesi yuvası: yazım farkları (colour/color) parmak izini bozar, bu yüzden
             # ABD dosyasında doğrulanan çeviriler kullanılır.
@@ -168,7 +189,10 @@ def install(game: Path, log) -> None:
                 en = strings.get(sid)
                 if en is None:
                     continue
-                if fingerprint(en) == fp:
+                if en == tr:
+                    present += 1
+                    texts[sid] = tr
+                elif fingerprint(en) == fp:
                     texts[sid] = tr
                 else:
                     stale += 1
@@ -186,6 +210,8 @@ def install(game: Path, log) -> None:
         save_json(STATE_FILE, state)
         shutil.rmtree(APP_DIR / "gecici", ignore_errors=True)
         msg = f"{rel}: {n} metin Türkçe"
+        if present:
+            msg += f" ({present} metin zaten Türkçeydi)"
         if stale:
             msg += f" ({stale} metin oyun güncellemesiyle değiştiği için İngilizce kaldı)"
         log(msg)
@@ -203,7 +229,9 @@ def uninstall(game: Path, log) -> None:
         backup = BACKUP_DIR / rel
         if not game_file.exists():
             continue
-        if entry.get("patched_sha") and sha256(game_file) == entry["patched_sha"] and backup.exists():
+        if entry.get("patched_sha") and not backup.exists():
+            log(f"{rel}: orijinal yedek yok. Epic Games / Steam'de oyun dosyalarını doğrulayarak geri alabilirsin.")
+        elif entry.get("patched_sha") and sha256(game_file) == entry["patched_sha"] and backup.exists():
             try:
                 shutil.copyfile(backup, game_file)
             except PermissionError as e:
